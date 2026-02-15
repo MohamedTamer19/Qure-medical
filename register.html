@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل مستخدم جديد - MediQR</title>
+    <style>
+        body { background: #e6f5fb; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 20px 0; }
+        .reg-container { background: white; width: 90%; max-width: 700px; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(2, 47, 85, 0.1); }
+        h2 { color: #022f55; text-align: center; border-bottom: 3px solid #00c1a7; display: inline-block; padding-bottom: 5px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .full-width { grid-column: span 2; }
+        label { display: block; margin-bottom: 8px; color: #022f55; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 12px; border: 2px solid #d0f0fd; border-radius: 10px; box-sizing: border-box; }
+        .section-title { grid-column: span 2; background: #022f55; padding: 10px; color: white; border-radius: 5px; margin-top: 10px; text-align: center; }
+        
+        /* تصميم قائمة الأمراض (Checkboxes) */
+        .chronic-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f9f9f9; padding: 15px; border-radius: 10px; border: 1px solid #d0f0fd; }
+        .chronic-item { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+        .chronic-item input { width: auto; }
+
+        button { width: 100%; padding: 15px; background: #00c1a7; color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        button:hover { background: #009b82; }
+    </style>
+</head>
+<body>
+
+<div class="reg-container">
+    <center><h2>إنشاء الملف الطبي</h2></center>
+    <form id="registerForm">
+        <div class="form-grid">
+            <div class="section-title">بيانات الحساب</div>
+            <div>
+                <label>الاسم بالكامل</label>
+                <input type="text" id="pName" required placeholder="أدخل اسمك الثلاثي">
+            </div>
+            <div>
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="pEmail" required placeholder="example@mail.com">
+            </div>
+            <div class="full-width">
+                <label>كلمة المرور</label>
+                <input type="password" id="pPass" required placeholder="********">
+            </div>
+
+            <div class="section-title">المعلومات الطبية</div>
+            <div>
+                <label>الرقم القومي</label>
+                <input type="text" id="pID" required>
+            </div>
+            <div>
+                <label>فصيلة الدم</label>
+                <select id="pBlood">
+                    <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                    <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+                </select>
+            </div>
+            <div>
+                <label>التليفون الأساسي</label>
+                <input type="tel" id="pPhone" required>
+            </div>
+            <div>
+                <label>تليفون الطوارئ (بديل)</label>
+                <input type="tel" id="pBackup">
+            </div>
+
+            <div class="full-width">
+                <label>الأمراض المزمنة (اختر مما يلي):</label>
+                <div class="chronic-list" id="chronicOptions">
+                    <div class="chronic-item"><input type="checkbox" value="السكر"> السكر</div>
+                    <div class="chronic-item"><input type="checkbox" value="الضغط"> الضغط</div>
+                    <div class="chronic-item"><input type="checkbox" value="أمراض القلب"> أمراض القلب</div>
+                    <div class="chronic-item"><input type="checkbox" value="الربو"> الربو</div>
+                    <div class="chronic-item"><input type="checkbox" value="الصرع"> الصرع</div>
+                    <div class="chronic-item"><input type="checkbox" value="حساسية صدر"> حساسية صدر</div>
+                </div>
+            </div>
+
+            <div>
+                <label>هل لديك حساسية من شيء؟</label>
+                <input type="text" id="pAllergy" placeholder="أدوية، أطعمة...">
+            </div>
+            <div>
+                <label>هل لديك فوبيا معينة؟</label>
+                <input type="text" id="pPhobia" placeholder="الأماكن المغلقة، الإبر...">
+            </div>
+        </div>
+        <button type="submit">حفظ البيانات وإنشاء الملف</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('registerForm').onsubmit = function(e) {
+        e.preventDefault();
+        
+        // جمع الأمراض المختارة
+        let selectedChronic = [];
+        document.querySelectorAll('#chronicOptions input:checked').forEach(checkbox => {
+            selectedChronic.push(checkbox.value);
+        });
+
+        const patient = {
+            id: document.getElementById('pID').value,
+            name: document.getElementById('pName').value,
+            email: document.getElementById('pEmail').value,
+            pass: document.getElementById('pPass').value,
+            blood: document.getElementById('pBlood').value,
+            phone: document.getElementById('pPhone').value,
+            chronic: selectedChronic.join(' - ') || 'لا يوجد'
+        };
+
+        // حفظ الحساب للدخول
+        localStorage.setItem('userAccount', JSON.stringify({email: patient.email, pass: patient.pass}));
+
+        // إضافة للداشبورد
+        let patients = JSON.parse(localStorage.getItem('patientsList')) || [];
+        patients.push(patient);
+        localStorage.setItem('patientsList', JSON.stringify(patients));
+
+        alert("تم حفظ بياناتك بنجاح!");
+        window.location.href = "index.html"; 
+    };
+</script>
+</body>
+</html>

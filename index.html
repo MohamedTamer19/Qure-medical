@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>الصفحة الرئيسية - Qure</title>
+    <style>
+        :root { --dark: #022f55; --green: #00c1a7; --light-bg: #e6f5fb; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background: #f9fbfd; color: var(--dark); }
+        
+        /* الهيدر */
+        header { 
+            background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000;
+        }
+        .logo-box { width: 120px; height: 50px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 12px; }
+        nav { display: flex; align-items: center; gap: 20px; }
+        nav a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 14px; }
+        .btn-logout { background: #ff5e5e; color: white; padding: 8px 15px; border-radius: 8px; }
+
+        /* قسم الشرح - البرسليت على الشمال */
+        .hero-section { 
+            display: flex; padding: 40px 8%; align-items: center; gap: 40px; background: white; flex-direction: row; 
+        }
+        .hero-text { flex: 2; text-align: right; }
+        .hero-text h1 { font-size: 28px; color: var(--dark); margin-bottom: 15px; }
+        .hero-text p { line-height: 1.8; color: #555; font-size: 16px; }
+        .hero-image { flex: 1; text-align: left; } /* الصورة أقصى الشمال */
+        .hero-image img { width: 100%; max-width: 350px; border-radius: 15px; }
+
+        /* قسم البيانات - الـ QR على الشمال */
+        .profile-container { 
+            padding: 40px 8%; display: flex; gap: 30px; flex-direction: row; 
+        }
+        .data-card { 
+            flex: 2; background: white; padding: 30px; border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); order: 1; /* البيانات يمين */
+        }
+        .qr-card { 
+            flex: 1; max-width: 280px; background: white; padding: 30px; border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; order: 2; /* الـ QR شمال */
+        }
+        
+        .data-card h2 { color: var(--dark); border-bottom: 2px solid var(--green); display: inline-block; padding-bottom: 5px; margin-bottom: 30px; }
+        
+        /* تنسيق الجدول */
+        table { width: 100%; border-collapse: collapse; }
+        table tr { border-bottom: 1px solid #f5f5f5; }
+        table td { padding: 18px 10px; font-size: 16px; }
+        .label { color: #888; font-weight: bold; width: 40%; }
+        .value { color: var(--dark); font-weight: 600; text-align: left; } /* القيم يسار الخلية لجعلها مرتبة */
+        .blood-type { color: #ff4757; font-weight: 800; }
+
+        .qr-card img { width: 100%; border-radius: 10px; margin-bottom: 15px; }
+        .qr-card p { font-weight: bold; font-size: 16px; margin: 5px 0; }
+        .qr-card small { color: #999; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-box">مكان اللوجو</div>
+    <nav>
+        <a href="#">الرئيسية</a>
+        <a href="store.html">متجر الأساور (Store)</a>
+        <a href="howitworks.html">عن المشروع (About)</a>
+        <a href="contact.html">اتصل بنا (Contact)</a>
+        <a href="login.html" class="btn-logout">خروج</a>
+    </nav>
+</header>
+
+<section class="hero-section">
+    <div class="hero-text">
+        <h1>سوار MediQR الذكي.. حارس إلكتروني لمعلوماتك</h1>
+        <p>هذا السوار ليس مجرد قطعة زينة، بل هو بطاقتك الطبية المنقذة للحياة. في حالات الطوارئ، يمكن لأي مسعف مسح الكود الخاص بك للوصول فوراً لبياناتك الصحية واتخاذ الإجراء المناسب في ثوانٍ معدودة.</p>
+    </div>
+    <div class="hero-image">
+        <img src="main.jpeg" alt="MediQR Bracelet">
+    </div>
+</section>
+
+<div class="profile-container">
+    <div class="data-card">
+        <h2>ملفك الطبي الشخصي</h2>
+        <table id="userData">
+            </table>
+    </div>
+
+    <div class="qr-card">
+        <img src="images/qr.jpg" alt="Your QR Code">
+        <p>Your QR Code</p>
+        <small>هذا الكود مربوط ببياناتك أعلاه</small>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        const patients = JSON.parse(localStorage.getItem('patientsList')) || [];
+        
+        if (patients.length > 0) {
+            const user = patients[patients.length - 1]; // جلب آخر مستخدم سجل
+            const table = document.getElementById('userData');
+            
+            table.innerHTML = `
+                <tr><td class="label">الاسم بالكامل:</td><td class="value">${user.name}</td></tr>
+                <tr><td class="label">الرقم القومي:</td><td class="value">${user.id}</td></tr>
+                <tr><td class="label">فصيلة الدم:</td><td class="value blood-type">${user.blood}</td></tr>
+                <tr><td class="label">تليفون الطوارئ:</td><td class="value">${user.phone}</td></tr>
+                <tr><td class="label">الأمراض المزمنة:</td><td class="value">${user.chronic}</td></tr>
+            `;
+        } else {
+            document.getElementById('userData').innerHTML = "<tr><td colspan='2'>لم يتم العثور على بيانات.</td></tr>";
+        }
+    };
+</script>
+
+</body>
+</html>

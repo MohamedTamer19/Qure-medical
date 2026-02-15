@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>دخول - Qure</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* التنسيق ليكون مثل الصورة التي أرفقتها بالضبط */
+        body { 
+            background-color: #e6f5fb; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        .login-card { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            width: 100%; 
+            max-width: 380px; 
+            text-align: center; 
+        }
+        .login-card img { height: 80px; margin-bottom: 10px; opacity: 0.8; }
+        .login-card h2 { color: #022f55; margin-bottom: 25px; font-weight: 600; }
+        
+        /* تصميم الحقول مثل الصورة */
+        .login-card input { 
+            width: 100%; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            border: 1px solid #eee; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            box-sizing: border-box;
+            outline: none;
+            text-align: right;
+        }
+        .login-card input:focus { border-color: #00c1a7; }
+
+        /* الزر التركواز الدائري */
+        .btn-login { 
+            width: 100%; 
+            padding: 14px; 
+            background-color: #00c1a7; 
+            color: white; 
+            border: none; 
+            border-radius: 25px; 
+            font-size: 18px; 
+            font-weight: bold; 
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 193, 167, 0.2);
+            transition: 0.3s;
+        }
+        .btn-login:hover { background-color: #00a892; transform: translateY(-2px); }
+        
+        .reg-link { margin-top: 20px; font-size: 14px; }
+        .reg-link a { color: #00c1a7; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <img src="logo.png" alt="Logo">
+        <h2>مرحباً بك مجدداً</h2>
+        
+        <input type="email" id="userEmail" placeholder="البريد الإلكتروني">
+        <input type="password" id="userPass" placeholder="كلمة المرور">
+        
+        <button class="btn-login" onclick="validateLogin()">دخول</button>
+
+        <div class="reg-link">
+            ليس لديك ملف طبي؟ <a href="register.html">سجل الآن</a>
+        </div>
+    </div>
+
+<script>
+    function validateLogin() {
+        // 1. جلب البيانات من المربعات
+        const emailInput = document.getElementById('userEmail').value;
+        const passInput = document.getElementById('userPass').value;
+
+        // 2. سحب الحساب المخزن من صفحة الـ Register
+        const savedAccount = localStorage.getItem('userAccount');
+
+        if (savedAccount) {
+            const user = JSON.parse(savedAccount);
+
+            // 3. المقارنة
+            if (emailInput === user.email && passInput === user.pass) {
+                alert("أهلاً بك! تم تسجيل الدخول.");
+                window.location.href = "index.html"; // سينقلك للرئيسية
+            } else {
+                alert("الإيميل أو كلمة المرور غير صحيحة!");
+            }
+        } else {
+            alert("لا يوجد حساب مسجل. يرجى الذهاب لصفحة التسجيل أولاً.");
+        }
+    }
+</script>
+
+</body>
+</html>

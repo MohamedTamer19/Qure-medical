@@ -1,0 +1,29 @@
+/* --- Variables & Reset --- */
+:root {
+    --dark-blue: #0a7298;
+    --mint-green: #00c1a7;
+    --light-blue: #e6f5fb;
+    --accent-blue: #d0f0fd;
+    --white: #ffffff;
+    --shadow: 0 10px 30px rgba(27, 202, 182, 0.1);
+}
+
+* { box-sizing: border-box; }
+body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--light-blue); color: var(--dark-blue); scroll-behavior: smooth; }
+a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+/* --- Layout --- */
+.container { max-width: 1200px; margin: auto; padding: 0 20px; }
+
+/* --- Header --- */
+header { background: var(--dark-blue); color: var(--white); padding: 15px 50px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+header img { height: 60px; }
+nav a { margin-left: 25px; font-weight: 600; font-size: 15px; opacity: 0.9; }
+nav a:hover { color: var(--mint-green); opacity: 1; }
+
+/* --- Buttons --- */
+.btn-primary { background: var(--mint-green); color: white; padding: 12px 25px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(0, 193, 167, 0.3); transition: 0.3s; }
+.btn-primary:hover { transform: translateY(-3px); background: #00a892; }
+
+/* --- Footer --- */
+footer { background: var(--dark-blue); color: white; text-align: center; padding: 30px; margin-top: 50px; }
